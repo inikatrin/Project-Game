@@ -3,20 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package projectgames;
+package main;
+
+import view.GameFrame;
+import view.TempatPanel;
 
 /**
  *
- * @author Personal
+ * @author user only
  */
-public class input {
-    private boolean isMenu=true;
-    
-    public void keyBoard(){
-        
-    }
-    
-    public void mouse(){
-        
+public class GameMain {
+    public static void main(String[] args) {
+        GameFrame game = new GameFrame("My Game");
     }
 }
