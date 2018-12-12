@@ -7,7 +7,6 @@ package test;
 
 import java.awt.Color;
 import javax.swing.JFileChooser;
-import model.Sel;
 import model.Tempat;
 import view.GameFrame;
 import view.TempatPanel;
