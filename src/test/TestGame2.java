@@ -17,6 +17,7 @@ import view.TempatPanel;
  */
 public class TestGame2 {
     public static void main(String[] args) {
+        //
         JFileChooser jf = new JFileChooser();
         int returnVal = jf.showOpenDialog(null);
         Tempat tempat = new Tempat();
