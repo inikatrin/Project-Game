@@ -9,126 +9,93 @@ import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JPanel;
 
 /**
  *
  * @author user only
  */
-public class Tempat {
-    private int tinggi; // tinggi tempat Game
-    private int lebar;  // lebar tempat Game
-    private ArrayList<Sel> daftarSel; // daftar sel
+public class Tempat extends JPanel {
 
+    private int tinggi = 0; // tinggi tempat Game
+    private int lebar = 0;
+    private int jarak = 30;// lebar tempat Game
+    private boolean completed = false;
+    private ArrayList<Sel> sel = new ArrayList<>(); // daftar sel
+    private ArrayList<dinding> dinding = new ArrayList();
+    private finish Finish;
+    private orang  Orang ;
+    private LinkedList<String> undo = new LinkedList<>();
     private String isi; // isi file konfigurasi
-    
-    public static int batasKanan;
-    public static int batasBawah;
-    
+    private final char DINDING = '#';
+    private final char ORANG = '@';
+    private final char KOSONG = '-';
+    private final char FINISH = 'O';
+
+    private File alamatPeta;
+    private ArrayList semuaPerintah = new ArrayList();
+
     public Tempat() {
-        daftarSel = new ArrayList<Sel>();
+        setFocusable(true);
+    }
+
+    public Tempat(File file) {
+        bacaKonfigurasi(file);
     }
     
+    public ArrayList<dinding>getDinding(){
+        return dinding;
+    }
     
-    /**
-     * Fungsi pembaca file konfigurasi.
-     * Hasil pembacaan file akan disimpan di atribut 'isi' dan juga di atribut daftarSel
-     * @param file 
-     */
-    public void bacaKonfigurasi(File file){
-          try {
-            FileInputStream fis = new FileInputStream(file);
-            String hasilBaca = "";
-            int dataInt;
-            int baris = 0;
-            int kolom = 0;
-            int tinggi = 50;
-            int lebar = 50;
-            while ((dataInt = fis.read()) != -1) {
-                if((char) dataInt != '\n'){
-                if ((char) dataInt == '#') {
-                    hasilBaca = hasilBaca + (char) dataInt;
-                    Sel sel = new Sel();
-                    sel.setNilai((char) dataInt);
-                    sel.setWarna(Color.white);
-                    sel.setBaris(baris);
-                    sel.setKolom(kolom);
-                    sel.setTinggi(tinggi);
-                    sel.setLebar(lebar);
-                    this.tambahSel(sel);
-                    kolom++;
-                } else if ((char) dataInt == '.') {
-                    hasilBaca = hasilBaca + (char) dataInt;
-                    Sel sel = new Sel();
-                    sel.setNilai((char) dataInt);
-                    sel.setWarna(Color.blue);
-                    sel.setBaris(baris);
-                    sel.setKolom(kolom);
-                    sel.setTinggi(tinggi);
-                    sel.setLebar(lebar);
-                    this.tambahSel(sel);
-                    kolom++;
-                } else if ((char) dataInt == '@') {
-                    hasilBaca = hasilBaca + (char) dataInt;
-                    Sel sel = new Sel();
-                    sel.setNilai((char) dataInt);
-                    sel.setWarna(Color.PINK);
-                    sel.setBaris(baris);
-                    sel.setKolom(kolom);
-                    sel.setTinggi(tinggi);
-                    sel.setLebar(lebar);
-                    this.tambahSel(sel);
-                    kolom++;
-                } else if ((char) dataInt == 'o') {
-                    hasilBaca = hasilBaca + (char) dataInt;
-                    Sel sel = new Sel();
-                    sel.setNilai((char) dataInt);
-                    sel.setWarna(Color.orange);
-                    sel.setBaris(baris);
-                    sel.setKolom(kolom);
-                    sel.setTinggi(tinggi);
-                    sel.setLebar(lebar);
-                    this.tambahSel(sel);
-                    kolom++;
-
-                }
-            }else {
-                    hasilBaca = hasilBaca + (char) dataInt;
-                    baris++;
-                    kolom = 0 ;
-                    }
-
-        }
-            this.setIsi(hasilBaca);
-        } catch (FileNotFoundException ex){
-            Logger.getLogger(Tempat.class.getName()).log(Level.SEVERE,null , ex);
-        } catch (IOException ex){
-            Logger.getLogger(Tempat.class.getName()).log(Level.SEVERE,null , ex);
-        }
-
+    public void setDinding(dinding Dinding){
+        this.dinding.add(Dinding);
     }
-
     
-    /**
-     * Fungsi penambah daftar sel.
-     * @param sel 
-     */
-    public void tambahSel(Sel sel){
-        daftarSel.add(sel);
+    public ArrayList<Sel>getSel(){
+        return sel;
+    }
+    
+     public void setSel(orang Orang, ArrayList<dinding> dinding, finish Finish ) {
+        this.sel.add(Orang);
+        this.sel.addAll(dinding );
+        this.sel.add(Finish);
     }
 
-    /**
-     * Fungsi hapus sel.
-     * Sel yang paling akhir diremove dari daftar sel.
-     */
-    public void hapusSel(){
-        if(!daftarSel.isEmpty()){
-            daftarSel.remove(0);
+    public void bacaKonfigurasi(File file) {
+         FileInputStream fis = null;
+        ObjectInputStream ois = null;
+        try {
+            fis = new FileInputStream(file);
+            ois = new ObjectInputStream(fis);
+            Tempat peta = (Tempat) ois.readObject();
+            this.setIsi(peta.getIsi());
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Sel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Sel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Sel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    public void simpanObjekKonfigurasi(File file) {
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(file);
+            fos.write(isi.getBytes());
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Tempat.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Tempat.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     /**
      * @return the tinggi
      */
@@ -158,20 +125,6 @@ public class Tempat {
     }
 
     /**
-     * @return the daftarSel
-     */
-    public ArrayList<Sel> getDaftarSel() {
-        return daftarSel;
-    }
-
-    /**
-     * @param daftarSel the daftarSel to set
-     */
-    public void setDaftarSel(ArrayList<Sel> daftarSel) {
-        this.daftarSel = daftarSel;
-    }
-
-    /**
      * @return the isi
      */
     public String getIsi() {
@@ -183,5 +136,9 @@ public class Tempat {
      */
     public void setIsi(String isi) {
         this.isi = isi;
+    }
+
+    public Object getDaftarSel() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

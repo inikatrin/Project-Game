@@ -43,7 +43,7 @@ public class GameFrame extends JFrame {
     private JButton okButton ;
     private JButton tambahButton;
     private JButton hapusButton;
-
+    
     private JMenuBar menuBar;
     private JMenu gameMenu;
     private JMenuItem exitMenuItem;
@@ -52,17 +52,21 @@ public class GameFrame extends JFrame {
     public GameFrame(String title ) {
         this.setTitle(title);
         this.init();
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
     }
 
     public GameFrame(String title, TempatPanel tempatPanel) {
         setTitle(title);
         this.tempatPanel = tempatPanel;
         this.init();
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
     }
 
     public void init() {
         // set ukuran dan layout
-        this.setSize(800, 500);
+        this.setSize(500,300);
         this.setLayout(new BorderLayout());
 
         // set menu Bar
@@ -70,6 +74,8 @@ public class GameFrame extends JFrame {
         gameMenu = new JMenu("Game");
         exitMenuItem = new JMenuItem("Keluar");
         bacaKonfigurasiMenuItem = new JMenuItem("Baca");
+        simpanKonfigurasiMenuItem = new JMenuItem("Simpan");
+        gameMenu.add(simpanKonfigurasiMenuItem);
         gameMenu.add(bacaKonfigurasiMenuItem);
         gameMenu.add(exitMenuItem);
         menuBar.add(gameMenu);
@@ -77,31 +83,48 @@ public class GameFrame extends JFrame {
         
          bacaKonfigurasiMenuItem.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent ae) {
+            public void actionPerformed(ActionEvent e) {
                 JFileChooser jf = new JFileChooser();
+                Tempat peta = null;
                 int returnVal = jf.showOpenDialog(null);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
-                    tempat.bacaKonfigurasi(jf.getSelectedFile());
-                    Tempat.batasKanan = 500;
-                    Tempat.batasBawah = 500;
-                    tempatPanel = new TempatPanel();
-                    tempatPanel.setTempat(tempat);
+                    boolean check = false;
+                    if (!check) {
+                        peta = new Tempat(jf.getSelectedFile());
+                        check = true;
+                    } else {
+                        peta.bacaObjekKonfigurasi(jf.getSelectedFile());
+                    }
+                    // menampilkan atribut 'isi' dari kelas Tempat
+                    System.out.println("\nIsi peta Baru = ");
+                    System.out.println(peta.getIsi());
+                    if (peta.getSel() != null) {
+                        for (int i = 0; i < peta.getSel().size(); i++) {
+                            // menampilkan nilai posisiX,posisiY dan nilai
+                            System.out.println(
+                                    peta.getSel().get(i).getPosisiX() + ","
+                                    + peta.getSel().get(i).getPosisiY() + ",");
+                        }
+                    }
                 }
+                // buat tempatPanel dan tambahkan tempat ke tempatPanel
+                peta = new Tempat();
                 init();
             }
-        }
-        );
+        });
         simpanKonfigurasiMenuItem.addActionListener(
                 new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent ae
-            ) {
-               
-                
+              public void actionPerformed(ActionEvent e) {
+                JFileChooser fc = new JFileChooser();
+                fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                int returnVal = fc.showSaveDialog(null);
+                Tempat peta = new Tempat();
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                    peta.simpanObjekKonfigurasi(fc.getSelectedFile());
+                }
             }
-        }
-        );
-
+        });
         //action perform for exitMenuItem
         exitMenuItem.addActionListener(new ActionListener() {
             @Override

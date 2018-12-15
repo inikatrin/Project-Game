@@ -17,7 +17,6 @@ import view.TempatPanel;
  */
 public class TestGame2 {
     public static void main(String[] args) {
-        //
         JFileChooser jf = new JFileChooser();
         int returnVal = jf.showOpenDialog(null);
         Tempat tempat = new Tempat();
@@ -39,7 +38,7 @@ public class TestGame2 {
         }
         // Set ukuran tempat
         Tempat.batasKanan=500;
-        Tempat.batasBawah=500;
+        Tempat.batasBawah=300;
         // buat tempatPanel dan tambahkan tempat ke tempatPanel
         TempatPanel tempatPanel = new TempatPanel();
         tempatPanel.setTempat(tempat);

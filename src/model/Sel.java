@@ -6,6 +6,7 @@
 package model;
 
 import java.awt.Color;
+import java.awt.Image;
 
 /**
  *
@@ -13,218 +14,96 @@ import java.awt.Color;
  */
 public class Sel {
 
-    private int baris=0;
-    private int kolom=0;
-    private int lebar=25;
-    private int tinggi=25;
-
+    private int posisiX;
+    private int posisiY;
+    private int lebar;
+    private int tinggi;
     private char nilai;
+    private Image image;
+    private int jarak=30;
 
-    private Color warna;
-
-    public Sel() {
+    public Sel(int x, int y) {
+        this.posisiX=x;
+        this.posisiY=y;
     }
-
-    public Sel(int baris, int kolom, char nilai) {
-        this.baris = baris;
-        this.kolom = kolom;
-        this.nilai = nilai;
-    }
-
-    public Sel(int baris, int kolom, char nilai, Color warna) {
-        this.baris = baris;
-        this.kolom = kolom;
-        this.nilai = nilai;
-        this.warna = warna;
-    }
-
-    public Sel(int baris, int kolom, int lebar, int tinggi, char nilai, Color warna) {
-        this.baris = baris;
-        this.kolom = kolom;
-        this.lebar = lebar;
-        this.tinggi = tinggi;
-        this.nilai = nilai;
-        this.warna = warna;
-    }
-
-    /**
-     * Fungsi mengecek sel ada di batas kiri
-     *
-     * @return
-     */
-    public boolean isBatasKiri() {
-        if (kolom * lebar <= 0) {
-            return true;
-        } else {
-            return false;
-        }
-
-    }
-
-    /**
-     * Fungsi ceking sel ada di batas kanan
-     *
-     * @return
-     */
-    public boolean isBatasKanan() {
-        if (kolom * lebar + lebar < Tempat.batasKanan) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    /**
-     * Fungsi untuk menggeser sel ke kanan
-     */
-    public void geserKanan(int x) {
-         if (isBatasKanan() == false) {
-            int nx = this.getKolom() + x;
-            int ny = this.getBaris();
-            this.setKolom(nx);
-            this.setBaris(ny);
-        }
-    }
-
-    /**
-     * Fungsi untuk menggeser sel ke kanan
-     */
-    public void geserKiri(int x) {
-        if (isBatasKiri() == false) {
-            int nx = this.getKolom() - x;
-            int ny = this.getBaris();
-            this.setKolom(nx);
-            this.setBaris(ny);
-        }
-    }
-
-    /**
-     * Fungsi untuk mengecek sel ada di batas atas
-     */
-    public boolean isBatasAtas() {
-        if (kolom * lebar + lebar < Tempat.batasKanan) {
-            return false;
-        } else {
-            return true;
-        }
     
+    public int getPosisiX() {
+        return posisiX;
     }
 
-    /**
-     * Fungsi untuk mengecek sel ada di batas bawah
-     */
-    public boolean isBatasBawah() {
-       if (baris * tinggi <= 0) {
-            return true;
-        } else {
-            return false;
-        }
+    public void setPosisiX(int posisiX) {
+        this.posisiX=posisiX;
     }
 
-    /**
-     * Fungsi untuk geser atas
-     */
-    public void geserAtas(int x){
-        if (isBatasAtas() == false) {
-            int nx = this.getKolom();
-            int ny = this.getBaris() - x;
-            this.setKolom(nx);
-            this.setBaris(ny);
-    }
-    }
-    /**
-     * Fungsi untuk geser bawah
-     */
-    public void geserBawah(int x){
-         if (isBatasBawah() == false) {
-            int nx = this.getKolom();
-            int ny = this.getBaris() + x;
-            this.setKolom(nx);
-            this.setBaris(ny);
-    }
-    }
-    /**
-     * @return the baris
-     */
-    public int getBaris() {
-        return baris;
+    public int getPosisiY() {
+        return posisiY;
     }
 
-    /**
-     * @param baris the baris to set
-     */
-    public void setBaris(int baris) {
-        this.baris = baris;
+    public void setPosisiY(int posisiY) {
+        this.posisiY = posisiY;
     }
 
-    /**
-     * @return the kolom
-     */
-    public int getKolom() {
-        return kolom;
-    }
-
-    /**
-     * @param kolom the kolom to set
-     */
-    public void setKolom(int kolom) {
-        this.kolom = kolom;
-    }
-
-    /**
-     * @return the nilai
-     */
     public char getNilai() {
         return nilai;
     }
 
-    /**
-     * @param nilai the nilai to set
-     */
     public void setNilai(char nilai) {
         this.nilai = nilai;
     }
 
-    /**
-     * @return the warna
-     */
-    public Color getWarna() {
-        return warna;
-    }
-
-    /**
-     * @param warna the warna to set
-     */
-    public void setWarna(Color warna) {
-        this.warna = warna;
-    }
-
-    /**
-     * @return the lebar
-     */
     public int getLebar() {
         return lebar;
     }
 
-    /**
-     * @param lebar the lebar to set
-     */
     public void setLebar(int lebar) {
         this.lebar = lebar;
     }
 
-    /**
-     * @return the tinggi
-     */
     public int getTinggi() {
         return tinggi;
     }
 
-    /**
-     * @param tinggi the tinggi to set
-     */
     public void setTinggi(int tinggi) {
         this.tinggi = tinggi;
     }
 
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
+    }
+
+    public boolean posisiKiri (Sel Object){
+        if(((this.getLebar()-jarak)== Object.getLebar())&&(this.getTinggi()==Object.getTinggi())){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
+    public boolean posisiKanan (Sel Object){
+        if(((this.getLebar()+jarak)==Object.getLebar())&&(this.getTinggi()==Object.getTinggi())){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
+    public boolean posisiAtas (Sel Object){
+        if(((this.getTinggi()-jarak)==Object.getTinggi())&&(this.getLebar()== Object.getLebar())){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
+    public boolean posisiBawah (Sel Object){
+        if(((this.getTinggi()+jarak)== Object.getTinggi())&&(this.getLebar()==Object.getLebar())){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }
