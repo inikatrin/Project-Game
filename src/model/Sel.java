@@ -77,23 +77,24 @@ public class Sel {
     /**
      * Fungsi untuk menggeser sel ke kanan
      */
-    public void geserKanan() {
-        if (isBatasKanan() == false) {
-            kolom++;
-        } else
-        {
-            kolom--;
+    public void geserKanan(int x) {
+         if (isBatasKanan() == false) {
+            int nx = this.getKolom() + x;
+            int ny = this.getBaris();
+            this.setKolom(nx);
+            this.setBaris(ny);
         }
     }
 
     /**
      * Fungsi untuk menggeser sel ke kanan
      */
-    public void geserKiri() {
+    public void geserKiri(int x) {
         if (isBatasKiri() == false) {
-            kolom--;
-        } else{
-            kolom++;
+            int nx = this.getKolom() - x;
+            int ny = this.getBaris();
+            this.setKolom(nx);
+            this.setBaris(ny);
         }
     }
 
@@ -101,28 +102,46 @@ public class Sel {
      * Fungsi untuk mengecek sel ada di batas atas
      */
     public boolean isBatasAtas() {
-        return false;
+        if (kolom * lebar + lebar < Tempat.batasKanan) {
+            return false;
+        } else {
+            return true;
+        }
+    
     }
 
     /**
      * Fungsi untuk mengecek sel ada di batas bawah
      */
     public boolean isBatasBawah() {
-        return false;
+       if (baris * tinggi <= 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
      * Fungsi untuk geser atas
      */
-    public void geserAtas(){
-        
+    public void geserAtas(int x){
+        if (isBatasAtas() == false) {
+            int nx = this.getKolom();
+            int ny = this.getBaris() - x;
+            this.setKolom(nx);
+            this.setBaris(ny);
     }
-    
+    }
     /**
      * Fungsi untuk geser bawah
      */
-    public void geserBawah(){
-        
+    public void geserBawah(int x){
+         if (isBatasBawah() == false) {
+            int nx = this.getKolom();
+            int ny = this.getBaris() + x;
+            this.setKolom(nx);
+            this.setBaris(ny);
+    }
     }
     /**
      * @return the baris
